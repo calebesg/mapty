@@ -277,8 +277,37 @@ class App {
 
     if (!data) return;
 
-    this.#workouts = data;
+    this.#workouts = data.map(item => this._createWorkoutObject(item));
+
     this.#workouts.forEach(work => this._renderWorkout(work));
+  }
+
+  _createWorkoutObject(data) {
+    let workout;
+
+    if (data.type === 'running') {
+      workout = new Running(
+        data.coords,
+        data.duration,
+        data.distance,
+        data.cadence
+      );
+      workout.id = data.id;
+      workout.date = data.date;
+    }
+
+    if (data.type === 'cycling') {
+      workout = new Cycling(
+        data.coords,
+        data.duration,
+        data.distance,
+        data.elevationGain
+      );
+      workout.id = data.id;
+      workout.date = data.date;
+    }
+
+    return workout;
   }
 
   reset() {
